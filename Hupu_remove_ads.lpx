@@ -1,22 +1,38 @@
-#!name = 虎扑去广告
-#!desc = 去除虎扑 App 广告：拦截 adlwai.com 广告域名，对 goblin.hupu.com 的广告接口（interfaceAd/getOther）返回空广告列表。需要信任证书并开启 MitM 解密。
+# 版本 v8：开屏 + 推荐资讯 + 跃马杯 + 热门快讯 + 期货盯盘banner + 广告红点
+#!name = 金十数据去广告
+#!desc = 去除金十数据 App 的开屏广告、首页推荐资讯、「跃马杯」推广、热门快讯、「期货盯盘神器」banner 和广告红点：对 JSON 接口返回 200 空 JSON（reject_dict），让 App 判定「无广告/无内容」直接跳过。需要信任证书并开启 MitM 解密。注意：开屏只拦 /ad2/opening，若重开后又出现，把 ad2/opening 改成 ad\d/ 覆盖所有广告版本。
 #!author = <你的名字>
-#!tag = 去广告, 虎扑
+#!tag = 去广告, 金十数据
 #!loon_version = 3.5.1(983)
 #!date = 2026-10-30
 
 [Rule]
-# 广告域名直接拒绝
-DOMAIN-SUFFIX,adlwai.com,REJECT
-# 广告接口若走 QUIC/HTTP3，先强制回落到 TCP（必须放在 DIRECT 之前，否则 QUIC 会先命中 DIRECT 而拦不到）
-AND,((DOMAIN-SUFFIX,goblin.hupu.com),(PROTOCOL,QUIC)),REJECT
-AND,((DOMAIN-SUFFIX,goblin.hupu.com),(PROTOCOL,UDP),(DEST-PORT,443)),REJECT
-# 广告接口域名走直连，便于 MitM 解密（TCP 流量在此命中）
-DOMAIN-SUFFIX,goblin.hupu.com,DIRECT
+# 广告接口：QUIC/UDP 降级到 TCP
+AND,((DOMAIN,jad-api.jin10.com),(PROTOCOL,QUIC)),REJECT
+AND,((DOMAIN,jad-api.jin10.com),(PROTOCOL,UDP),(DEST-PORT,443)),REJECT
+# CDN 接口：QUIC/UDP 降级到 TCP
+AND,((DOMAIN,cdn.jin10.com),(PROTOCOL,QUIC)),REJECT
+AND,((DOMAIN,cdn.jin10.com),(PROTOCOL,UDP),(DEST-PORT,443)),REJECT
+# 跃马杯/热门快讯接口（随机子域名的 z3c 域名）：QUIC/UDP 降级到 TCP
+AND,((DOMAIN-SUFFIX,z3c.jin10.com),(PROTOCOL,QUIC)),REJECT
+AND,((DOMAIN-SUFFIX,z3c.jin10.com),(PROTOCOL,UDP),(DEST-PORT,443)),REJECT
+# 配置接口：QUIC/UDP 降级到 TCP
+AND,((DOMAIN,common-open-api.jin10.com),(PROTOCOL,QUIC)),REJECT
+AND,((DOMAIN,common-open-api.jin10.com),(PROTOCOL,UDP),(DEST-PORT,443)),REJECT
 
 [Rewrite]
-# 广告接口返回空广告列表
-response if ${url} ~= /^https?:\/\/goblin\.hupu\.com\/\d+\/[\d.]+\/interfaceAd\/getOther/ then response.body.mock("json", `{"ad_code":-41,"show_type":0,"ads":[]}`, 200)
+# 开屏广告
+request if ${url} ~= /^https:\/\/jad-api\.jin10\.com\/ad2\/opening/i then reject_dict(200)
+# 广告红点/未读营销
+request if ${url} ~= /^https:\/\/jad-api\.jin10\.com\/mult\/list_unread/i then reject_dict(200)
+# 首页推荐资讯
+request if ${url} ~= /^https:\/\/cdn\.jin10\.com\/json\/index\/flir\.json/i then reject_dict(200)
+# 「跃马杯」模拟交易大赛全部接口
+request if ${url} ~= /^https:\/\/[0-9a-z]+\.z3c\.jin10\.com\/gma_contest_/i then reject_dict(200)
+# 热门快讯
+request if ${url} ~= /^https:\/\/[0-9a-z]+\.z3c\.jin10\.com\/flash\/hot/i then reject_dict(200)
+# 「期货盯盘神器」banner（配置 id=1530）
+request if ${url} ~= /^https:\/\/common-open-api\.jin10\.com\/configuration\/getById\?id=1530$/i then reject_dict(200)
 
 [Mitm]
-hostname = goblin.hupu.com
+hostname = jad-api.jin10.com, cdn.jin10.com, *.z3c.jin10.com, common-open-api.jin10.com
