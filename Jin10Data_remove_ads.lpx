@@ -1,16 +1,23 @@
-#!name = 金十数据去开屏广告
-#!desc = 去除金十数据 App 开屏广告：对广告接口返回 200 空 JSON，让 App 判定「今天无广告」直接跳过。需要信任证书并开启 MitM 解密。注意：本版只拦 /ad2/opening，若重开后又出现广告，把规则里的 ad2/opening 改成 ad\d/ 即可覆盖所有广告版本。
+#!name = 金十数据去广告
+#!desc = 去除金十数据 App 的开屏广告和首页推荐内容：对 JSON 接口返回 200 空 JSON（reject_dict），让 App 判定「无广告/无内容」直接跳过，而不是 REJECT 404 触发兜底。需要信任证书并开启 MitM 解密。注意：开屏只拦 /ad2/opening，若重开后又出现，把 ad2/opening 改成 ad\d/ 覆盖所有广告版本。
 #!author = <你的名字>
 #!tag = 去广告, 金十数据
 #!loon_version = 3.5.1(983)
 #!date = 2026-10-30
 
 [Rule]
+# 广告接口：QUIC/UDP 降级到 TCP，让复写能拦截
 AND,((DOMAIN,jad-api.jin10.com),(PROTOCOL,QUIC)),REJECT
 AND,((DOMAIN,jad-api.jin10.com),(PROTOCOL,UDP),(DEST-PORT,443)),REJECT
+# CDN 接口：QUIC/UDP 降级到 TCP
+AND,((DOMAIN,cdn.jin10.com),(PROTOCOL,QUIC)),REJECT
+AND,((DOMAIN,cdn.jin10.com),(PROTOCOL,UDP),(DEST-PORT,443)),REJECT
 
 [Rewrite]
+# 开屏广告
 request if ${url} ~= /^https:\/\/jad-api\.jin10\.com\/ad2\/opening/i then reject_dict(200)
+# 首页推荐内容
+request if ${url} ~= /^https:\/\/cdn\.jin10\.com\/json\/index\/flir\.json/i then reject_dict(200)
 
 [Mitm]
-hostname = jad-api.jin10.com
+hostname = jad-api.jin10.com, cdn.jin10.com
