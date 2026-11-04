@@ -29,11 +29,7 @@ bypass-tun = 10.0.0.0/8,100.64.0.0/10,127.0.0.0/8,169.254.0.0/16,172.16.0.0/12,1
 [Proxy]
 
 [Remote Proxy]
-赔钱机场 = https://dasho.pqjc.site/api/v1/pq/8f4124507b5cdfe800756b79ac83f22f,udp=true,block-quic=true,fast-open=default,vmess-aead=default,skip-cert-verify=true,enabled=true,flexible-sni=false
-微斯人，吾谁与归 = https://static01.flowaccess.org/signal/channel/receiver?token=0dd2fd1dfdd9517ee322bcb14f07a16d&name=微斯人，吾谁与归,udp=true,block-quic=true,fast-open=default,vmess-aead=default,skip-cert-verify=true,enabled=false,flexible-sni=false
-glados = https://update.glados-config.com/subscribe/376098/ec743c2/171016/servers,udp=true,block-quic=true,fast-open=default,vmess-aead=default,skip-cert-verify=true,enabled=false,flexible-sni=false,parser-plugin=fbdb76a56495f8af4d0a5b5c3a253dce
-CF优选 = https://yihang198.pages.dev/sub?token=c3091f8b5eb6d9d560e3f399544745eb,udp=true,block-quic=true,fast-open=default,vmess-aead=default,skip-cert-verify=true,enabled=true,flexible-sni=false
-悠云 = https://hvihtu0tuzupn9kxuyk4.shijienameda.com/challenge/patience?token=65766af4360d2989a68b61e51d272fcc,udp=true,block-quic=true,fast-open=default,vmess-aead=default,skip-cert-verify=true,enabled=false,flexible-sni=false
+
 
 [Remote Filter]
 香港节点 = NameRegex, FilterKey = "^(?=.*((?i)🇭🇰|香港|(\b(HK|HKG|Hong)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b))).*$"
