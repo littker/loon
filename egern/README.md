@@ -14,6 +14,7 @@
 | `baidunetdisk.js` | 百度网盘会员签到+答题 | MaYIHEI/paperclip |
 | `dreame.js` | 追觅商城每日签到 | MaYIHEI/paperclip |
 | `youpin.js` | 小米有品每日签到红包 | MaYIHEI/paperclip |
+| `sfsyV3.js` | 顺丰速运每日签到 | IDAz7 (gist) |
 
 ### modified/（修改版）
 
