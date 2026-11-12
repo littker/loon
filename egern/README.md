@@ -12,6 +12,7 @@
 | `Tuhyche.js` | 途虎养车积分签到 | Crazy-Z7/Task |
 | `qqmusic.js` | QQ音乐每日任务/金币/红包雨 | MaYIHEI/paperclip |
 | `baidunetdisk.js` | 百度网盘会员签到+答题 | MaYIHEI/paperclip |
+| `dreame.js` | 追觅商城每日签到 | MaYIHEI/paperclip |
 
 ### modified/（修改版）
 
