@@ -13,6 +13,7 @@
 | `qqmusic.js` | QQ音乐每日任务/金币/红包雨 | MaYIHEI/paperclip |
 | `baidunetdisk.js` | 百度网盘会员签到+答题 | MaYIHEI/paperclip |
 | `dreame.js` | 追觅商城每日签到 | MaYIHEI/paperclip |
+| `youpin.js` | 小米有品每日签到红包 | MaYIHEI/paperclip |
 
 ### modified/（修改版）
 
