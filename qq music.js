@@ -74,6 +74,14 @@ export default async function (ctx) {
       else if (typeof ctx.request.body === "string") bodyText = ctx.request.body;
     } catch (e) { bodyText = ""; }
     $request = { url: ctx.request.url || "", headers: hdr, body: bodyText };
+
+    // 诊断日志: 命中即打印, 方便判断脚本有没有被触发、有没有 cookie
+    console.log("[INFO] 抓Cookie命中:", ctx.request.url);
+    const cookieKeys = Object.keys(hdr).filter((k) => k.toLowerCase() === "cookie");
+    console.log("[INFO] 是否有 cookie 头:", cookieKeys.length ? "有" : "无(未登录/没进签到页/MITM 未生效)");
+    if (!cookieKeys.length && ctx.env && ctx.env.debug === "true") {
+      console.log("[DEBUG] 实际命中的请求头名:", JSON.stringify(Object.keys(hdr)));
+    }
   }
 
 
