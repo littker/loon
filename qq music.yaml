@@ -24,7 +24,7 @@ scriptings:
       name: QQ音乐-抓Cookie
       match: '(?i)^https://u6\.y\.qq\.com/cgi-bin/musics\.fcg\?.*(EveryDaySignLvzScore|GetSignInSummary)'
       # ↓↓↓ 改成你托管后的 qqmusic-egern-v2.js 地址
-      script_url: https://raw.githubusercontent.com/littker/loon/refs/heads/main/qq%20music-v2.js
+      script_url: https://raw.githubusercontent.com/littker/loon/refs/heads/main/qq%20music.js
       body_required: true
       max_size: 10485760
       timeout: 30
@@ -33,7 +33,7 @@ scriptings:
   - schedule:
       name: QQ音乐-每日任务
       cron: "30 7 * * *"
-      script_url: https://raw.githubusercontent.com/littker/loon/refs/heads/main/qq%20music-v2.js
+      script_url: https://raw.githubusercontent.com/littker/loon/refs/heads/main/qq%20music.js
       timeout: 600
       update_interval: 86400
 
@@ -41,7 +41,7 @@ scriptings:
   - schedule:
       name: QQ音乐-定时金币
       cron: "* 9-10 * * *"
-      script_url: https://raw.githubusercontent.com/littker/loon/refs/heads/main/qq%20music-v2.js
+      script_url: https://raw.githubusercontent.com/littker/loon/refs/heads/main/qq%20music.js
       timeout: 600
       update_interval: 86400
 
@@ -49,6 +49,6 @@ scriptings:
   - schedule:
       name: QQ音乐-红包雨
       cron: "5 0,8,12,16,20,22 * * *"
-      script_url: https://raw.githubusercontent.com/littker/loon/refs/heads/main/qq%20music-v2.js
+      script_url: https://raw.githubusercontent.com/littker/loon/refs/heads/main/qq%20music.js
       timeout: 600
       update_interval: 86400
