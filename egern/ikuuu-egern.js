@@ -27,8 +27,8 @@ export default async function (ctx) {
 
   // ===== 模式 1：抓 Cookie（http_request）=====
   if (ctx.request) {
-    // 默认开启，只有显式选 off 才关闭
-    const captureOn = !(ctx.env && ctx.env.auto_capture === "off");
+    // 默认开启，只有开关切到 false 才关闭
+    const captureOn = !(ctx.env && (ctx.env.auto_capture === "false" || ctx.env.auto_capture === "off"));
     if (!captureOn) {
       if (debug) log("[DEBUG] 自动抓取已关闭，跳过");
       return;
