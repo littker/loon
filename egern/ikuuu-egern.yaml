@@ -1,0 +1,24 @@
+# ikuuu.co 每日签到 —— Egern 模块
+name: ikuuu每日签到
+description: ikuuu.co 每日签到领取免费流量（每天 08:35 自动签到，无需 MITM/证书）
+author: Claude Code
+
+# 模块设置页会自动生成「Cookie」输入框和「调试模式」开关
+env_schema:
+  cookie:
+    name: Cookie
+    description: 登录 ikuuu.co 后，从浏览器「请求头 Request Headers」复制的完整 Cookie（约 7 天过期，失效后需重新登录并更新）
+  debug:
+    name: 调试模式
+    description: 打开后打印请求/响应日志，用于排查签到失败的问题
+    options:
+      - "true"
+      - "false"
+
+scriptings:
+  - schedule:
+      name: ikuuu每日签到
+      cron: "35 8 * * *" # 每天 08:35 自动签到，可自行修改时间
+      # ↓ 托管地址（Mac / iPhone 版 Egern 都能用）
+      script_url: "https://raw.githubusercontent.com/littker/loon/main/egern/ikuuu-egern.js"
+      timeout: 30
