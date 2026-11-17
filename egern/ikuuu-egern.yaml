@@ -1,24 +1,45 @@
-# ikuuu.co 每日签到 —— Egern 模块
+# ikuuu.co 每日签到 —— Egern 模块（自动抓 Cookie 版）
 name: ikuuu每日签到
-description: ikuuu.co 每日签到领取免费流量（每天 08:35 自动签到，无需 MITM/证书）
+description: ikuuu.co 每日签到领免费流量：手动签到一次自动抓 Cookie，之后每天 08:35 自动签到
 author: Claude Code
 
-# 模块设置页会自动生成「Cookie」输入框和「调试模式」开关
+# 抓 Cookie 需要解密 ikuuu.co 的 HTTPS 请求头
+# 首次使用务必：Egern「工具 → 证书 → 生成/安装 CA 证书」，然后到 iPhone
+# 「设置 → 通用 → 关于本机 → 证书信任设置」开启对 Egern 证书的完全信任
+mitm:
+  hostnames:
+    - ikuuu.co
+    - www.ikuuu.co
+
 env_schema:
+  auto_capture:
+    name: 自动抓取 Cookie
+    description: on=手动签到后自动保存 Cookie（默认）；off=关闭自动抓取
+    options:
+      - "on"
+      - "off"
   cookie:
-    name: Cookie
-    description: 登录 ikuuu.co 后，从浏览器「请求头 Request Headers」复制的完整 Cookie（约 7 天过期，失效后需重新登录并更新）
+    name: 手动 Cookie（备用）
+    description: 可选。自动抓取没成功时，可手动粘贴登录 ikuuu.co 后的完整 Cookie
   debug:
     name: 调试模式
-    description: 打开后打印请求/响应日志，用于排查签到失败的问题
+    description: 打开后打印请求/响应日志，用于排查抓取或签到失败
     options:
       - "true"
       - "false"
 
 scriptings:
+  # 1) 抓 Cookie：浏览器里手动签到（点 ikuuu 的签到按钮）时自动保存
+  - http_request:
+      name: ikuuu-抓Cookie
+      match: '^https://(www\.)?ikuuu\.co/'
+      script_url: "https://raw.githubusercontent.com/littker/loon/main/egern/ikuuu-egern.js"
+      body_required: false
+      timeout: 30
+
+  # 2) 签到：每天 08:35 用已抓到的 Cookie 自动签到
   - schedule:
       name: ikuuu每日签到
-      cron: "35 8 * * *" # 每天 08:35 自动签到，可自行修改时间
-      # ↓ 托管地址（Mac / iPhone 版 Egern 都能用）
+      cron: "35 8 * * *" # 每天 08:35，可自行修改
       script_url: "https://raw.githubusercontent.com/littker/loon/main/egern/ikuuu-egern.js"
       timeout: 30
