@@ -14,10 +14,11 @@ mitm:
 env_schema:
   auto_capture:
     name: 自动抓取 Cookie
-    description: on=手动签到后自动保存 Cookie（默认）；off=关闭自动抓取
+    description: 开启后，手动签到一次即自动保存 Cookie（默认开启）
+    default_value: "true"
     options:
-      - "on"
-      - "off"
+      - "true"
+      - "false"
   cookie:
     name: 手动 Cookie（备用）
     description: 可选。自动抓取没成功时，可手动粘贴登录 ikuuu.co 后的完整 Cookie
